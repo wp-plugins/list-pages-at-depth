@@ -7,7 +7,7 @@
 Plugin Name: List Pages at Depth
 Plugin URI: http://www.benhuson.co.uk/wordpress-plugins/list-pages-at-depth/
 Description: Enhanced wp_list_pages function so you can specify a start depth. Useful for showing secondary and tertiary navigation independently from primary navigation.
-Version: 1.0
+Version: 1.1
 Author: Ben Huson
 Author URI: http://www.benhuson.co.uk/
 
@@ -33,7 +33,7 @@ function list_pages_at_depth( $args = '') {
 		
 		if ( $args['startdepth'] < count($result) ) {
 			$args['child_of'] = $result[$args['startdepth']];
-			wp_list_pages( $args );
+			return wp_list_pages( $args );
 		}
 		
 	}
