@@ -48,9 +48,13 @@ function list_pages_at_depth_parent( $page_id, $result ) {
 	
 	$page = get_page($page_id);
 	
-	array_unshift($result, $page->ID);
-	array_unshift($result, $page->post_parent);
-
+	if ( !in_array($page->ID, $result) ) {
+		array_unshift($result, $page->ID);
+	}
+	if ( !in_array($page->post_parent, $result) ) {
+		array_unshift($result, $page->post_parent);
+	}
+	
 	if ( $page->post_parent == 0 ) {
 		return $result;
 	} else {
