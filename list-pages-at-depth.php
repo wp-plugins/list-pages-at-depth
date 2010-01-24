@@ -18,6 +18,10 @@ http://www.opensource.org/licenses/gpl-license.php
 
 
 
+require_once('includes/widget.php');
+
+
+
 function list_pages_at_depth( $args = '') {
 	
 	global $post;
@@ -27,7 +31,6 @@ function list_pages_at_depth( $args = '') {
 		if ( !isset($args['startdepth']) ) {
 			$args['startdepth'] = 0;
 		}
-		
 		$result = array();
 		$result = list_pages_at_depth_parent( $post->ID, $result );
 		
