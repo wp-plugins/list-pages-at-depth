@@ -1,10 +1,10 @@
 === List Pages at Depth ===
 Contributors: Ben Huson
 Donate link: http://www.benhuson.co.uk/wordpress-plugins/list-pages-at-depth/
-Tags: wp_list_pages, navigation, page parents, breadcrumbs, cms
+Tags: wp_list_pages, navigation, page parents, breadcrumbs, cms, widget
 Requires at least: 2.8
-Tested up to: 2.8.6
-Stable tag: 1.0
+Tested up to: 2.9.1
+Stable tag: 1.1
 
 A more powerful version of wp_list_pages() which allows you to specify a start depth - useful for displaying secondary and tertiary navigation seperately from your primary navigation.
 
@@ -18,9 +18,16 @@ The `list_pages_at_depth` function accepts all the same arguments as `wp_list_pa
 
 `<?php list_pages_at_depth(array('startdepth' => 1,'depth' => 1)); ?>`
 
+The plugin also includes a widget so you can easily add it to your site.
+
 
 == Changelog ==
 
+= 1.1 =
+
+* Added widget.
+* Fixed bug caused by duplicates when finding parent and child pages.
+
 = 1.0 =
 
-* First Release
+* First Release.
