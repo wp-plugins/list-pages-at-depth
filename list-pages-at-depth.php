@@ -26,11 +26,12 @@ function list_pages_at_depth( $args = '') {
 	
 	global $post;
 	
-	if ( is_page() ) {
+	if ( !isset($args['startdepth']) ) {
+		$args['startdepth'] = 0;
+	}
 	
-		if ( !isset($args['startdepth']) ) {
-			$args['startdepth'] = 0;
-		}
+	if ( is_page() || $args['startdepth'] == 0 ) {
+		
 		$result = array();
 		$result = list_pages_at_depth_parent( $post->ID, $result );
 		
