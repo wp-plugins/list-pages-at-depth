@@ -66,4 +66,40 @@ function list_pages_at_depth_parent( $page_id, $result ) {
 
 
 
+function list_pages_at_depth_shortcode( $atts, $content = null ) {
+	
+	global $post;
+	
+	$atts = shortcode_atts( array(
+		'startdepth'   => 0,
+		'depth'        => 0,
+		'show_date'    => '',
+		'date_format'  => get_option( 'date_format' ),
+		'child_of'     => $post->ID,
+		'exclude'      => '',
+		'include'      => '',
+		'title_li'     => '',
+		'authors'      => '',
+		'sort_column'  => 'menu_order, post_title',
+		'sort_order'   => 'ASC',
+		'link_before'  => '',
+		'link_after'   => '',
+		'exclude_tree' => '',
+		'number'       => 0,
+		'offset'       => 0,
+		'meta_key'     => '',
+		'meta_value'   => '',
+	), $atts );
+	
+	$atts['echo'] = 0;
+	print_r( $atts );
+	
+	return list_pages_at_depth( $atts );
+	
+}
+
+add_shortcode( 'list_pages_at_depth', 'list_pages_at_depth_shortcode' );
+
+
+
 ?>
