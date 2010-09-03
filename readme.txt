@@ -1,5 +1,5 @@
 === List Pages at Depth ===
-Contributors: Ben Huson
+Contributors: husobj
 Donate link: http://www.benhuson.co.uk/wordpress-plugins/list-pages-at-depth/
 Tags: wp_list_pages, navigation, page parents, breadcrumbs, cms, widget
 Requires at least: 2.8
