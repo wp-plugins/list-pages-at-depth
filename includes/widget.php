@@ -24,12 +24,13 @@ class WP_Widget_Pages_at_Depth_at_Depth extends WP_Widget {
 		$startdepth = $instance['startdepth'] > 0 ? $instance['startdepth'] : 0;
 		$depth = $instance['depth'] > 0 ? $instance['depth'] : 0;
 		$exclude = empty( $instance['exclude'] ) ? '' : $instance['exclude'];
+		$ancestors_of = absint( $instance['ancestors_of'] ) > 0 ? absint( $instance['ancestors_of'] ) : '';
 
 		if ( $sortby == 'menu_order' ) {
 			$sortby = 'menu_order, post_title';
 		}
 		
-		$out = list_pages_at_depth( apply_filters('widget_pages_args', array('startdepth' => $startdepth, 'depth' => $depth, 'title_li' => '', 'echo' => 0, 'sort_column' => $sortby, 'exclude' => $exclude) ) );
+		$out = list_pages_at_depth( apply_filters('widget_pages_args', array('startdepth' => $startdepth, 'depth' => $depth, 'title_li' => '', 'echo' => 0, 'sort_column' => $sortby, 'exclude' => $exclude, 'ancestors_of' => $ancestors_of ) ) );
 		
 		if ( !empty($out) ) {
 			echo $before_widget;
@@ -59,7 +60,8 @@ class WP_Widget_Pages_at_Depth_at_Depth extends WP_Widget {
 		
 		$instance['startdepth'] = $new_instance['startdepth'] > 0 ? $new_instance['startdepth'] : 0;
 		$instance['depth'] = $new_instance['depth'] > 0 ? $new_instance['depth'] : 0;
-
+		$instance['ancestors_of'] = $new_instance['ancestors_of'] > 0 ? $new_instance['ancestors_of'] : 0;
+		
 		return $instance;
 		
 	}
@@ -71,6 +73,7 @@ class WP_Widget_Pages_at_Depth_at_Depth extends WP_Widget {
 		$instance = wp_parse_args( (array) $instance, array( 'sortby' => 'post_title', 'title' => '', 'exclude' => '') );
 		$title = esc_attr( $instance['title'] );
 		$exclude = esc_attr( $instance['exclude'] );
+		$ancestors_of = esc_attr( $instance['ancestors_of'] );
 		
 		?>
 		<p><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:'); ?></label> <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo $title; ?>" /></p>
@@ -103,6 +106,11 @@ class WP_Widget_Pages_at_Depth_at_Depth extends WP_Widget {
 		<p>
 			<label for="<?php echo $this->get_field_id('exclude'); ?>"><?php _e( 'Exclude:' ); ?></label> <input type="text" value="<?php echo $exclude; ?>" name="<?php echo $this->get_field_name('exclude'); ?>" id="<?php echo $this->get_field_id('exclude'); ?>" class="widefat" /><br />
 			<small><?php _e( 'Page IDs, separated by commas.' ); ?></small>
+		</p>
+		<p>
+			<label for="<?php echo $this->get_field_id('ancestors_of'); ?>"><?php _e( 'Ancestors of:' ); ?></label>
+			<?php wp_dropdown_pages( array( 'name' => $this->get_field_name('ancestors_of'), 'selected' => absint($ancestors_of), 'show_option_none' => 'Default (current page)' ) ); ?><br />
+			<small><?php _e( 'Defaults to the current page.' ); ?></small>
 		</p>
 		<?php
 	}
