@@ -30,17 +30,11 @@ function list_pages_at_depth( $args = '') {
 		$args['startdepth'] = 0;
 	}
 	
-	if ( !isset($args['ancestors_of']) || $args['ancestors_of'] == 0 ) {
-		$args['ancestors_of'] = $post->ID;
-	}
-	
-	$compatible_post_types = apply_filters( 'list_pages_at_depth_post_types', array() );
-	
-	if ( is_page() || in_array( get_post_type(), $compatible_post_types ) || $args['startdepth'] == 0 ) {
+	if ( is_page() || $args['startdepth'] == 0 ) {
 		
 		$result = array();
+		$result = list_pages_at_depth_parent( $post->ID, $result );
 		
-		$result = list_pages_at_depth_parent( $args['ancestors_of'], $result );
 		if ( $args['startdepth'] < count($result) ) {
 			$args['child_of'] = $result[$args['startdepth']];
 			return wp_list_pages( $args );
