@@ -1,19 +1,24 @@
 <?php
 
 class WP_Widget_Pages_at_Depth_at_Depth extends WP_Widget {
-	
+
 	/**
 	 * Constructor
 	 */
 	function WP_Widget_Pages_at_Depth_at_Depth() {
-		$widget_ops = array( 'classname' => 'widget_pages', 'description' => __( 'Your blog&#8217;s WordPress Pages configured by depth' ) );
-		$this->WP_Widget( 'pages_at_depth', __( 'Pages at Depth' ), $widget_ops );
+
+		$this->WP_Widget( 'pages_at_depth', __( 'Pages at Depth' ), array(
+			'classname'   => 'widget_pages',
+			'description' => __( 'Your blog&#8217;s WordPress Pages configured by depth'
+		) ) );
+
 	}
-	
+
 	/**
 	 * Widget output
 	 */
 	function widget( $args, $instance ) {
+
 		extract( $args );
 
 		$title = apply_filters( 'widget_title', $instance['title'] );
@@ -22,9 +27,10 @@ class WP_Widget_Pages_at_Depth_at_Depth extends WP_Widget {
 		$depth = $instance['depth'] > 0 ? $instance['depth'] : 0;
 		$exclude = empty( $instance['exclude'] ) ? '' : $instance['exclude'];
 
-		if ( $sortby == 'menu_order' )
+		if ( $sortby == 'menu_order' ) {
 			$sortby = 'menu_order, post_title';
-		
+		}
+
 		$out = list_pages_at_depth( apply_filters( 'widget_pages_args', array(
 			'startdepth'  => $startdepth,
 			'depth'       => $depth,
@@ -33,23 +39,26 @@ class WP_Widget_Pages_at_Depth_at_Depth extends WP_Widget {
 			'sort_column' => $sortby,
 			'exclude'     => $exclude
 		) ) );
-		
+
 		if ( ! empty( $out ) ) {
 			echo $before_widget;
-			if ( $title )
+			if ( $title ) {
 				echo $before_title . $title . $after_title;
+			}
 			echo '<ul class="list-pages-at-depth">' . $out . '</ul>';
 			echo $after_widget;
 		}
+
 	}
-	
+
 	/**
 	 * Update Widget
 	 */
 	function update( $new_instance, $old_instance ) {
+
 		$instance = $old_instance;
 		$instance['title'] = strip_tags( $new_instance['title'] );
-		
+
 		if ( in_array( $new_instance['sortby'], array( 'post_title', 'menu_order', 'ID' ) ) ) {
 			$instance['sortby'] = $new_instance['sortby'];
 		} else {
@@ -61,12 +70,14 @@ class WP_Widget_Pages_at_Depth_at_Depth extends WP_Widget {
 		$instance['depth'] = $new_instance['depth'] > 0 ? $new_instance['depth'] : 0;
 
 		return $instance;
+
 	}
-	
+
 	/**
 	 * Widget Form
 	 */
 	function form( $instance ) {
+
 		$instance = wp_parse_args( (array) $instance, array(
 			'sortby'     => 'post_title',
 			'title'      => '',
@@ -76,7 +87,7 @@ class WP_Widget_Pages_at_Depth_at_Depth extends WP_Widget {
 		) );
 		$title = esc_attr( $instance['title'] );
 		$exclude = esc_attr( $instance['exclude'] );
-		
+
 		?>
 		<p><label for="<?php echo $this->get_field_id('title'); ?>"><?php _e( 'Title:' ); ?></label> <input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo $title; ?>" /></p>
 		<p>
@@ -110,14 +121,15 @@ class WP_Widget_Pages_at_Depth_at_Depth extends WP_Widget {
 			<small><?php _e( 'Page IDs, separated by commas.' ); ?></small>
 		</p>
 		<?php
+
 	}
-	
+
 }
 
 function list_page_at_depth_widgets_init() {
+
 	register_widget( 'WP_Widget_Pages_at_Depth_at_Depth' );
+
 }
 
 add_action( 'widgets_init', 'list_page_at_depth_widgets_init', 1 );
-
-?>
