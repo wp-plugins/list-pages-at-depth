@@ -5,7 +5,7 @@
 Plugin Name: List Pages at Depth
 Plugin URI: http://wordpress.org/plugins/list-pages-at-depth/
 Description: Enhanced wp_list_pages function so you can specify a start depth. Useful for showing secondary and tertiary navigation independently from primary navigation.
-Version: 1.3.1
+Version: 1.4
 Author: Ben Huson
 Author URI: https://github.com/benhuson/list-pages-at-depth
 
@@ -31,6 +31,35 @@ class List_Pages_At_Depth {
 	}
 
 	/**
+	 * Page List Item CSS Classes
+	 *
+	 * @param   array  $css_class     Classes.
+	 * @param   object $page          Page object.
+	 * @param   int    $depth         Depth.
+	 * @param   array  $args          Args.
+	 * @param   int    $current_page  Current page ID.
+	 * @return  array                 Classes.
+	 */
+	function page_css_class( $css_class, $page, $depth, $args, $current_page ) {
+
+		if ( get_the_ID() == $page->ID ) {
+			$css_class[] = 'current_page_item';
+		} else {
+			$ancestors = get_ancestors( get_the_ID(), 'page' );
+			if ( count( $ancestors ) > 0 ) {
+				if ( $ancestors[ count( $ancestors ) - 1 ] == $page->ID ) {
+					$css_class[] = 'current_page_parent';
+				} elseif ( in_array( $page->ID, $ancestors ) ) {
+					$css_class[] = 'current_page_ancestor';
+				}
+			}
+		}
+
+		return $css_class;
+
+	}
+
+	/**
 	 * List pages
 	 */
 	function list_pages( $args = '' ) {
@@ -41,13 +70,20 @@ class List_Pages_At_Depth {
 			$args['startdepth'] = 0;
 		}
 
-		if ( is_page() || $args['startdepth'] == 0 ) {
+		if ( 'page' == get_post_type() || $args['startdepth'] == 0 ) {
 			$result = array();
 			$result = $this->list_pages_at_depth_parent( $post->ID, $result );
 
+			$args['selected'] = $post->ID;
+
 			if ( $args['startdepth'] < count( $result ) ) {
 				$args['child_of'] = $result[ $args['startdepth'] ];
-				return wp_list_pages( $args );
+
+				add_filter( 'page_css_class', array( $this, 'page_css_class' ), 10, 5 );
+				$list_pages = wp_list_pages( $args );
+				remove_filter( 'page_css_class', array( $this, 'page_css_class' ), 10, 5 );
+
+				return $list_pages;
 			}
 		}
 
